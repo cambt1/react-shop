@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { Nav } from "react-bootstrap";
+
+import { Context1 } from "./../App.js";
 
 let YellowBtn = styled.button`
   background: ${(props) => props.bg};
@@ -14,9 +17,13 @@ let Box = styled.div`
 `;
 
 const Detail = (props) => {
+  let { 재고, shoes } = useContext(Context1); //보관함 해체 함수
+
   let [warning, warningSet] = useState(true);
   let [count, setCount] = useState(0);
   let [num, setNum] = useState("");
+  let [탭, 탭변경] = useState(0);
+  let [fade2, setFade2] = useState("");
 
   useEffect(() => {
     //mount,update시 실행될 코드
@@ -27,6 +34,13 @@ const Detail = (props) => {
     return () => {
       //기존 타이머 제거, 기존 데이터 요청
       clearTimeout(a);
+    };
+  }, []);
+
+  useEffect(() => {
+    setFade2("end");
+    return () => {
+      setFade2("");
     };
   }, []);
 
@@ -49,7 +63,7 @@ const Detail = (props) => {
   console.log(찾은상품.id);
 
   return (
-    <div className="container">
+    <div className={"container start " + fade2}>
       {warning === true ? (
         <div className="alert alert-warning">2초이내 구매시 할인</div>
       ) : null}
@@ -90,8 +104,91 @@ const Detail = (props) => {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
+
+      <Nav variant="tabs" defaultActiveKey="link0">
+        <Nav.Item>
+          <Nav.Link
+            eventKey="link0"
+            onClick={() => {
+              탭변경(0);
+            }}
+          >
+            Active
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            eventKey="link1"
+            onClick={() => {
+              탭변경(1);
+            }}
+          >
+            Option 2
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            eventKey="link2"
+            onClick={() => {
+              탭변경(2);
+            }}
+          >
+            Option 3
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+      {/* {탭 == 0 ? <div>내용0</div> : null}
+      {탭 == 1 ? <div>내용1</div> : null}
+      {탭 == 2 ? <div>내용2</div> : null} */}
+      {/* App->Detail->TabContent : 단계별 props전송 */}
+      <TabContent shoes={props.shoes} 탭={탭} />
     </div>
   );
 };
+
+// function TabContent(props) {
+//   // component 뱉을 것에 return 필요
+//   if (props.탭 == 0) {
+//     return <div>내용0</div>;
+//   } else if (props.탭 == 1) {
+//     return <div>내용1</div>;
+//   } else if (props.탭 == 2) {
+//     return <div>내용2</div>;
+//   }
+// }
+// function TabContent({ 탭 }) {
+//   if (탭 == 0) {
+//     return <div>내용0</div>;
+//   } else if (탭 == 1) {
+//     return <div>내용1</div>;
+//   } else if (탭 == 2) {
+//     return <div>내용2</div>;
+//   }
+// }
+
+// function TabContent({ 탭 }) {
+//   return [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][탭];
+// }
+function TabContent({ 탭, shoes }) {
+  let [fade, setFade] = useState("");
+  let { 재고 } = useContext(Context1);
+
+  //탭 state가 변할 때 end 부착
+  useEffect(() => {
+    setTimeout(() => {
+      setFade("end");
+    }, 100);
+    //useEffect실행 전에 실행시키고 싶을 때
+    return () => {
+      setFade("");
+    };
+  }, [탭]);
+  return (
+    <div className={`start ${fade}`}>
+      {/* {[<div>{shoes[0].title}</div>, <div>내용1</div>, <div>내용2</div>][탭]} */}
+      {[<div>{재고}</div>, <div>내용1</div>, <div>내용2</div>][탭]}
+    </div>
+  );
+}
 
 export default Detail;

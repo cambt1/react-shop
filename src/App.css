@@ -13,3 +13,15 @@ a {
   background-size: cover;
   background-position: center;
 }
+
+.start {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.end {
+  transform: scale(1);
+  opacity: 1;
+  /* transition: opacity 0.5s; */
+  transition: all 0.5s;
+}
