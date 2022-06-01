@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Nav } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { addItem } from "./../store";
 
 import { Context1 } from "./../App.js";
 
@@ -17,6 +19,8 @@ let Box = styled.div`
 `;
 
 const Detail = (props) => {
+  let dispatch = useDispatch();
+
   let { 재고, shoes } = useContext(Context1); //보관함 해체 함수
 
   let [warning, warningSet] = useState(true);
@@ -101,7 +105,14 @@ const Detail = (props) => {
           <h4 className="pt-5">{찾은상품.title}</h4>
           <p>{찾은상품.content}</p>
           <p>{찾은상품.price}원</p>
-          <button className="btn btn-danger">주문하기</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              dispatch(addItem({ id: 1, name: "Red Knit", count: 1 }));
+            }}
+          >
+            주문하기
+          </button>
         </div>
       </div>
 

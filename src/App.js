@@ -11,6 +11,15 @@ import Cart from "./routes/Cart.js";
 export let Context1 = React.createContext(); //state보관함 = ContextAPI
 
 function App() {
+  let obj = { name: "kim" };
+  // object자료를 JSON으로""쳐줌
+  localStorage.setItem("data", JSON.stringify(obj));
+  let ls = localStorage.getItem("data");
+  // JSON을 Object로
+  let toObj = JSON.parse(ls);
+  console.log(toObj.name);
+  console.log(JSON.parse(ls).name);
+
   let [shoes, setShoes] = useState(data);
   let [isMore, isMoreSet] = useState(false);
   //버튼 누른 횟수
@@ -38,6 +47,14 @@ function App() {
               }}
             >
               Detail
+              {/* <Link to="/detail">Detail</Link> */}
+            </Nav.Link>
+            <Nav.Link
+              onClick={() => {
+                navigate("cart");
+              }}
+            >
+              Cart
               {/* <Link to="/detail">Detail</Link> */}
             </Nav.Link>
             <Nav.Link
