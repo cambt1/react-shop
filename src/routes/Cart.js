@@ -1,8 +1,23 @@
+import React, { useState, memo, useMemo } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { increaseAge, changeName, increaseCount, addItem } from "./../store";
 
+let Child = memo(function () {
+  console.log("재렌더링됨");
+  return <div>자식임</div>;
+});
+
+function 함수() {
+  return console.log("반복문 10억번 돌린결과");
+}
+
 function Cart() {
+  let result = 함수(0);
+  useMemo(() => {
+    return 함수();
+  }, [state]);
+
   let state = useSelector((state) => {
     //중괄호와 return은 동시 생략 가능
     // return state.user;
@@ -14,8 +29,19 @@ function Cart() {
   console.log(state.stock);
   console.log(state.cartItems);
   let cartItems = state.cartItems;
+
+  let [count, setCount] = useState(0);
+
   return (
     <div>
+      <Child count={count}></Child>
+      <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        +
+      </button>
       {state.user.name}의 장바구니
       <button
         onClick={() => {

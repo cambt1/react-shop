@@ -18,7 +18,13 @@ let Box = styled.div`
   padding: 20px;
 `;
 
+var a = 0;
+
 const Detail = (props) => {
+  for (var i = 0; i < 19; i++) {
+    a = i;
+  }
+
   let dispatch = useDispatch();
 
   let { 재고, shoes } = useContext(Context1); //보관함 해체 함수
@@ -60,11 +66,25 @@ const Detail = (props) => {
 
   let { id } = useParams();
   console.log(id);
+
   let 찾은상품 = props.shoes.find(function (x) {
     // 파라미터로 받은 id와 상품의 id가 같은 경우
     return x.id == id;
   });
   console.log(찾은상품.id);
+
+  useEffect(() => {
+    //1.누가 Detail페이지 접속하면
+    //2.그 페이지에 보이는 상품id 가져와서
+    //3.localStorage에 watched 항목에 추가
+    let 꺼낸거 = localStorage.getItem("watched");
+    꺼낸거 = JSON.parse(꺼낸거);
+    꺼낸거.push(찾은상품.id);
+    꺼낸거 = new Set(꺼낸거);
+    // Set을 Array로 변환
+    꺼낸거 = Array.from(꺼낸거);
+    localStorage.setItem("watched", JSON.stringify(꺼낸거));
+  }, []);
 
   return (
     <div className={"container start " + fade2}>
